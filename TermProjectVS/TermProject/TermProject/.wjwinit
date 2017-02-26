@@ -1,0 +1,4 @@
+add student 15323032 李新锐
+select r 1 y 2015 t 2
+load /mnt/d/classes.json
+

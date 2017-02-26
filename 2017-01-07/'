@@ -1,0 +1,7 @@
+main(n)
+{
+    float b;
+    for (;scanf("%f", &b), b; printf("%d card(s)\n", n - 1))
+        for (n = 1; b > 0;) b -= 1. / ++n;
+    }
+}

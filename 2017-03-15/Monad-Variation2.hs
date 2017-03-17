@@ -8,7 +8,7 @@ eval (Div t u) x =  let (a, y) = eval t x in
                     (a `div` b, z + 1)
 unit :: a -> M a
 unit a = (\x -> (a, x))
-mmap m k :: M a -> (a -> M b) -> M b
+mmap :: M a -> (a -> M b) -> M b
 mmap m k = (\x -> let (a, y) = m x in
                   let (b, z) = k a y in
                   (b, z))

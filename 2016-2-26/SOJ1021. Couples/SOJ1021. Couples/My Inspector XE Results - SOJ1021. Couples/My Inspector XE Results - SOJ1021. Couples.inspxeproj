@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+ <connectionOption></connectionOption>
+ <rdmgr>
+  <timestamp type="u64_t">1456484232</timestamp>
+  <hostname>lixinrui-pc</hostname>
+  <os>windows</os>
+  <product>Intel® Inspector XE 2016 Update 1</product>
+  <buildNumber type="s32_t">434495</buildNumber>
+  <logicalCPUCount type="s32_t">8</logicalCPUCount>
+  <CPUFrequency type="s64_t">2600000000</CPUFrequency>
+ </rdmgr>
+ <contextValues>
+  <contextValue>
+   <id>emulatorByCtxKnob</id>
+   <value></value>
+  </contextValue>
+ </contextValues>
+ <All_Configurations-All_Platforms>
+  <analysis_type_settings>
+   <selected_analysis_type_path>F:\Program Files (x86)\IntelSWTools\Inspector XE 2016\config\analysis_type\mi2.cfg</selected_analysis_type_path>
+  </analysis_type_settings>
+  <target_settings>
+   <selected_workload>
+    <localhost>launch</localhost>
+   </selected_workload>
+   <result_pattern>
+    <localhost>r@@@{at}</localhost>
+   </result_pattern>
+   <workloads>
+    <localhost>
+     <launch type="pointer" type_id="dasID_cctrl2::ApplicationWorkload" ptr_type="dasID_cctrl2::IWorkload">
+      <workload>
+       <targetName>launch</targetName>
+       <enable_app_output_log type="bool">false</enable_app_output_log>
+       <project_id>{F86F25B4-3DCB-44AE-B535-65CEF27370FC}</project_id>
+       <launch_app.app_to_launch>F:\Coding\2016-2-26\SOJ1021. Couples\Debug\SOJ1021. Couples.exe</launch_app.app_to_launch>
+       <launch_app.working_folder>F:\Coding\2016-2-26\SOJ1021. Couples\SOJ1021. Couples</launch_app.working_folder>
+       <launch_app.environment>PATH=;%PATH%&#13;
+PATH=;%PATH%&#13;
+&#13;
+    &#13;
+    </launch_app.environment>
+       <launch_app.environment_prepend>PATH=;</launch_app.environment_prepend>
+       <use_app_dir_as_work_dir type="bool">false</use_app_dir_as_work_dir>
+       <result_directory.path>F:\Coding\2016-2-26\SOJ1021. Couples\SOJ1021. Couples\My Inspector XE Results - SOJ1021. Couples\r@@@{at}</result_directory.path>
+       <search_directories>
+        <item>
+         <value>sym=F:\Coding\2016-2-26\SOJ1021. Couples\Debug</value>
+        </item>
+        <item>
+         <value>sym=F:\Coding\2016-2-26\SOJ1021. Couples</value>
+        </item>
+        <item>
+         <value>sym=srv*F:\Coding\SymbolCache</value>
+        </item>
+        <item>
+         <value>sym=srv*https://msdl.microsoft.com/download/symbols</value>
+        </item>
+        <item>
+         <value>bin=F:\Coding\2016-2-26\SOJ1021. Couples\Debug</value>
+        </item>
+        <item>
+         <value>bin=F:\Coding\2016-2-26\SOJ1021. Couples</value>
+        </item>
+        <item>
+         <value>bin=C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin</value>
+        </item>
+        <item>
+         <value>bin=C:\Program Files (x86)\Windows Kits\8.1\bin\x86</value>
+        </item>
+        <item>
+         <value>bin=C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6 Tools</value>
+        </item>
+        <item>
+         <value>bin=C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\Tools\bin</value>
+        </item>
+        <item>
+         <value>bin=C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\tools</value>
+        </item>
+        <item>
+         <value>bin=C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\ide</value>
+        </item>
+        <item>
+         <value>bin=C:\Program Files (x86)\HTML Help Workshop</value>
+        </item>
+        <item>
+         <value>bin=C:\Program Files (x86)\MSBuild\14.0\bin</value>
+        </item>
+        <item>
+         <value>bin=C:\Windows\Microsoft.NET\Framework\v4.0.30319</value>
+        </item>
+        <item>
+         <value>bin=C:\Windows\SysWow64</value>
+        </item>
+        <item>
+         <value>bin=F:\Program Files (x86)\IntelSWTools\Trace Analyzer and Collector\9.1.2.024\bin</value>
+        </item>
+        <item>
+         <value>bin=F:\Program Files (x86)\IntelSWTools\compilers_and_libraries_2016.1.146\windows\mpi\intel64\bin</value>
+        </item>
+        <item>
+         <value>bin=C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64_win\mpirt</value>
+        </item>
+        <item>
+         <value>bin=C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\ia32_win\mpirt</value>
+        </item>
+        <item>
+         <value>bin=C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64_win\compiler</value>
+        </item>
+        <item>
+         <value>bin=C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\ia32_win\compiler</value>
+        </item>
+        <item>
+         <value>bin=C:\Python27</value>
+        </item>
+        <item>
+         <value>bin=C:\Python27\Scripts</value>
+        </item>
+        <item>
+         <value>bin=C:\Program Files (x86)\Intel\iCLS Client</value>
+        </item>
+        <item>
+         <value>bin=C:\Program Files\Intel\iCLS Client</value>
+        </item>
+        <item>
+         <value>bin=C:\Windows\system32</value>
+        </item>
+        <item>
+         <value>bin=C:\Windows</value>
+        </item>
+        <item>
+         <value>bin=C:\Windows\System32\Wbem</value>
+        </item>
+        <item>
+         <value>bin=C:\Windows\System32\WindowsPowerShell\v1.0</value>
+        </item>
+        <item>
+         <value>bin=C:\Program Files (x86)\Windows Kits\8.1\Windows Performance Toolkit</value>
+        </item>
+        <item>
+         <value>bin=C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common</value>
+        </item>
+        <item>
+         <value>bin=C:\Program Files\Intel\Intel(R) Management Engine Components\DAL</value>
+        </item>
+        <item>
+         <value>bin=C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL</value>
+        </item>
+        <item>
+         <value>bin=C:\Program Files\Intel\Intel(R) Management Engine Components\IPT</value>
+        </item>
+        <item>
+         <value>bin=C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT</value>
+        </item>
+        <item>
+         <value>bin=C:\Program Files\Intel\WiFi\bin</value>
+        </item>
+        <item>
+         <value>bin=C:\Program Files\Common Files\Intel\WirelessCommon</value>
+        </item>
+        <item>
+         <value>bin=C:\Program Files\Microsoft\Web Platform Installer</value>
+        </item>
+        <item>
+         <value>bin=C:\Program Files (x86)\mingw-w64\i686-5.2.0-posix-dwarf-rt_v4-rev1\mingw32\bin</value>
+        </item>
+        <item>
+         <value>bin=F:\Program Files (x86)\IntelSWTools\Trace Analyzer and Collector\9.1.2.024\dll</value>
+        </item>
+        <item>
+         <value>bin=C:\Program Files\Bandizip\7z</value>
+        </item>
+       </search_directories>
+       <exclude_modules type="bag"/>
+       <context>
+        <contextValue>
+         <id>appdebug</id>
+         <value>off</value>
+        </contextValue>
+        <contextValue>
+         <id>custom_debugger</id>
+         <value></value>
+        </contextValue>
+        <contextValue>
+         <id>debug_this_problem</id>
+         <value></value>
+        </contextValue>
+        <contextValue>
+         <id>debug_using</id>
+         <value>gdb</value>
+        </contextValue>
+        <contextValue>
+         <id>heartbeat</id>
+         <value type="bool">true</value>
+        </contextValue>
+        <contextValue>
+         <id>modules_switch</id>
+         <value>knob.modules_switch.include</value>
+        </contextValue>
+        <contextValue>
+         <id>mrte_mode</id>
+         <value>auto</value>
+        </contextValue>
+        <contextValue>
+         <id>process_for_analysis</id>
+         <value></value>
+        </contextValue>
+        <contextValue>
+         <id>suppressions</id>
+         <value>delete</value>
+        </contextValue>
+        <contextValue>
+         <id>targetType</id>
+         <value>launch</value>
+        </contextValue>
+       </context>
+      </workload>
+     </launch>
+    </localhost>
+   </workloads>
+  </target_settings>
+ </All_Configurations-All_Platforms>
+ <debugger_settings>
+  <debugger_mode>off</debugger_mode>
+  <at_cliname>mi2</at_cliname>
+ </debugger_settings>
+</root>

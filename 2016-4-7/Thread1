@@ -1,0 +1,30 @@
+#include <stdio.h>
+double A[100][100];
+double X[100],Y[100];
+void *threadX(void *row)
+{
+int i =*(int *) row;
+Y[i]=0;
+for(int k=0;k<100;k++)
+{
+Y[i]+=A[i][k]*X[k];
+}
+return NULL;
+}
+int main()
+{
+//input A X
+pthread_t tid[100];
+for(int i=0;i<100;i++)
+{
+pthread_creat(&tid[i],NULL,threadX,(void*)&i);
+}
+for(int i=0;i<100;i++)
+{
+pthread_join(tid[i],NULL);
+for(int i=0;i<100；i++)
+{
+printf("y[%d]=%d\n",i,y[i]);
+}
+return 0;
+}

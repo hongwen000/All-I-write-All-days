@@ -5,7 +5,7 @@
       (/ (n i)
          (+ (d i)
             (cont-frac-helper (+ i 1))))))
-  (cont-frac-helper n d k 1))
+  (cont-frac-helper 1))
 (define (cont-frac-iter n d k)
   (define (cont-frac-helper-iter i result)
     (if (= i 0)

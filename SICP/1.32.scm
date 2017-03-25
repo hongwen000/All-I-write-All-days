@@ -1,0 +1,27 @@
+(define (cont-frac n d k)
+  (define (cont-frac-helper i)
+    (if (> i k)
+      0
+      (/ (n i)
+         (+ (d i)
+            (cont-frac-helper (+ i 1))))))
+  (cont-frac-helper n d k 1))
+(define (cont-frac-iter n d k)
+  (define (cont-frac-helper-iter i result)
+    (if (= i 0)
+      result
+      (cont-frac-helper-iter (- i 1)
+                             (/ (n i)
+                                (+ result (d i))))))
+(cont-frac-helper-iter (- k 1)  (/ (n k)
+                                   (d k))))
+(define (golden-ratio k)
+    (+ 1
+       (cont-frac (lambda (i) 1.0)
+                  (lambda (i) 1.0)
+                  k)))
+(define (golden-ratio-iter k)
+    (+ 1
+       (cont-frac-iter  (lambda (i) 1.0)
+                        (lambda (i) 1.0)
+                        k)))

@@ -1,0 +1,5 @@
+#lang sicp
+(#%require "sec2.1.1-rational.rkt")
+(define point 
+(define (make-segment start end)
+  (const 

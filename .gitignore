@@ -5,6 +5,7 @@ Desktop.ini
 
 # Prerequisites
 *.d
+*.bak
 
 # Compiled Object files
 *.slo

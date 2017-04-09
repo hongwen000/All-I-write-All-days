@@ -1,7 +1,6 @@
 // 1001. The Complex class.cpp : 定义控制台应用程序的入口点。
 //
 
-#include "stdafx.h"
 #include <iostream>
 #include <string>
 #include <cmath>
@@ -128,51 +127,6 @@ istream & operator>>(istream & in, Complex &s)
 {
 	char a;
 	in >> a >> s.re >> a >> s.im >> a;
-	//string temp;
-	//in >> temp;
-	//if (temp.empty())
-	//{
-	//	return in;
-	//}
-	//s = s - s;
-	//for (int iter = temp.length() - 2,power=0,flag=0, flagDot = 0; iter > 0; iter--,power ++)
-	//{
-	//	if (temp.at(iter)== ',')
-	//	{
-	//		flag = 1;
-	//		power = 0;
-	//		flagDot = 0;
-	//		continue;
-	//	}
-	//	if (temp.at(iter) == '.')
-	//	{
-	//		flagDot = 1;
-	//		continue;
-	//	}
-	//	if (!flag && !flagDot)
-	//	{
-	//		s.im += (temp.at(iter)-48)*pow(10, power);
-	//	}
-	//	else if (flag && !flagDot)
-	//	{
-	//		s.re += ((temp.at(iter)-48)*pow(10, power))/10;
-	//	}
-	//	else if(!flag && flagDot)
-	//	{
-	//		s.im /= pow(10, power-1);
-	//		power = 0;
-	//		s.im += (temp.at(iter) - 48)*pow(10, power);
-	//		flagDot = 0;
-	//	}
-	//	else
-	//	{
-	//		s.re /= pow(10, power - 2);
-	//		power = 1;
-	//		s.re += ((temp.at(iter) - 48)*pow(10, power)) / 10;
-	//		flagDot = 0;
-	//	}
-	//}
-	// TODO: 在此处插入 return 语句
 	return in;
 }
 void f()

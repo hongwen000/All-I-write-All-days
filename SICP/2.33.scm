@@ -1,4 +1,3 @@
-#lang sicp
 (define (accumulate op initial sequence)
   (if (null? sequence)
       initial
@@ -8,7 +7,7 @@
 
 (define (map p sequence)
   (accumulate (lambda (x y) (cons (p x) y))
-              '() 
+              '()
               sequence))
 
 (define (append seq1 seq2)
@@ -128,8 +127,6 @@
                     (list i j))
                   (enumerate-interval 1 (- i 1))))
            (enumerate-interval 1 n)))
-
-;2.41
 (define (unique-tri-tuple n)
   (flatmap (lambda (i)
               (map (lambda (j) (cons i j));这里卡住了一下，结论是：虽然无法限定从二元组扩充到三元组，增加的那个元素是最小的，但可以通过unique-pairs的形参限定他是最大的啊
@@ -138,48 +135,3 @@
 (define (tuple-equal-sum n tuple)
   (let ((sum (accumulate + 0 tuple)))
     (= n sum)))
-(define  (unique-tri-tuple-equal-sum n)
-  (filter (lambda (tuple) (tuple-equal-sum n tuple)) (unique-tri-tuple n)))
-    
-;2.42
-(define empty-board '())
-
-(define (adjoin-positions new-row k rest-of-positions)
-  (cons new-row rest-of-positions))
-
-(define (safe? k position)
-  (define (safe-iter new-row position i)
-    (if (null? position)
-      #t
-      (let ((current-fight (car position)))
-        (if (or (= current-fight new-row)
-                (= current-fight (+ new-row i))
-                (= current-fight (- new-row i)))
-          #f
-          (safe-iter new-row (cdr position) (+ 1 i))))))
-  (let ((new-row (car position)))
-   (safe-iter new-row (cdr position) 1)))
-
-
-        
-(define (queens board-size)
-  (define (queen-cols k)
-    (if (= k 0)
-      (list empty-board)
-      (filter
-        (lambda (positions) (safe? k positions))
-        (flatmap
-          (lambda (rest-of-queens)
-            (map (lambda (new-row)
-                   (adjoin-positions new-row k rest-of-queens))
-                 (enumerate-interval 1 board-size)))
-          (queen-cols (- k 1))))))
-  (queen-cols board-size))
-
-(display (queens 8))
-;交换前，对于每个queen-cols，adjoin每个board-size
-;T(n) = T(n-1) + O(n)
-;O(n^2)
-;交换次序导致对于每个board-size，queen-cols都被求值一次
-;T(n) = n * T(n-1)
-;O(n!)

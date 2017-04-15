@@ -1,7 +1,6 @@
 // 1002. The Date class (version 4).cpp : 定义控制台应用程序的入口点。
 //
 
-#include "stdafx.h"
 
 #include <iostream>
 #include <sstream>
@@ -40,10 +39,10 @@ private:
 
 
 
-int lyear[13] = { 0,31,29,31,30,31,30,31,31,30,31,30,31 };
-int nlyear[13] = { 0,31,28,31,30,31,30,31,31,30,31,30,31 };
-int sumlyear[13];
-int sumnlyear[13];
+static int lyear[13] = { 0,31,29,31,30,31,30,31,31,30,31,30,31 };
+static int nlyear[13] = { 0,31,28,31,30,31,30,31,31,30,31,30,31 };
+static int sumlyear[13] = { 0,31,60,91,121,152,182,213,244,274,305,335,366 };
+static int sumnlyear[13] = { 0,31,59,90,120,151,181,212,243,273,304,334,365 };
 
 void iniSumYear()
 {
@@ -258,5 +257,6 @@ int& Date::operator[](string key)
 int main()
 {
 	iniSumYear();
-
+	for (int i = 1; i < 13; i++)
+		cout << sumnlyear[i] << ",";
 }

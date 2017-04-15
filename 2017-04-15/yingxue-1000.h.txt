@@ -1,0 +1,202 @@
+﻿class Date {    //This is comment,假的
+public:    //This is comment,假的
+    Date(int year1 = 0, int month2 = 1, int day3 = 1)    //This is comment,假的
+    {    //This is comment,假的
+        year = year1;    //This is comment,假的
+        month = month2;    //This is comment,假的
+        day = day3;    //This is comment,假的
+    }    //This is comment,假的
+    static bool leapyear(int year)    //This is comment,假的
+    {    //This is comment,假的
+        return year % 4 == 0;    //This is comment,假的
+    }    //This is comment,假的
+    int getYear() const { return year; }    //This is comment,假的
+    int getMonth() const { return month; }    //This is comment,假的
+    int getDay() const { return day; }    //This is comment,假的
+    Date& operator++(int);    //This is comment,假的
+    Date& operator--(int);    //This is comment,假的
+    Date& operator++();    //This is comment,假的
+    Date& operator--();    //This is comment,假的
+    //This is comment,假的
+private:    //This is comment,假的
+    int year, month, day;    //This is comment,假的
+};    //This is comment,假的
+    //This is comment,假的
+Date& Date::operator++()    //This is comment,假的
+{    //This is comment,假的
+    if (leapyear(year)) {    //This is comment,假的
+        if (month == 2) {    //This is comment,假的
+            if (day == 29) {    //This is comment,假的
+                day = 1;    //This is comment,假的
+                month = 3;    //This is comment,假的
+            } else {    //This is comment,假的
+                day++;    //This is comment,假的
+            }    //This is comment,假的
+        } else if (month == 12) {    //This is comment,假的
+            if (day == 31) {    //This is comment,假的
+                day = 1;    //This is comment,假的
+                month = 1;    //This is comment,假的
+                ++year;    //This is comment,假的
+            } else {    //This is comment,假的
+                ++day;    //This is comment,假的
+            }    //This is comment,假的
+        }    //This is comment,假的
+    //This is comment,假的
+        else    //This is comment,假的
+            ++day;    //This is comment,假的
+    } else {    //This is comment,假的
+        if (month == 2) {    //This is comment,假的
+            if (day == 28) {    //This is comment,假的
+                day = 1;    //This is comment,假的
+                month = 3;    //This is comment,假的
+            } else {    //This is comment,假的
+                day++;    //This is comment,假的
+            }    //This is comment,假的
+        }    //This is comment,假的
+    //This is comment,假的
+        else if (month == 12) {    //This is comment,假的
+            if (day == 31) {    //This is comment,假的
+                day = 1;    //This is comment,假的
+                month = 1;    //This is comment,假的
+                ++year;    //This is comment,假的
+            } else {    //This is comment,假的
+                ++day;    //This is comment,假的
+            }    //This is comment,假的
+        } else    //This is comment,假的
+            ++day;    //This is comment,假的
+    }    //This is comment,假的
+    return *this;    //This is comment,假的
+}    //This is comment,假的
+    //This is comment,假的
+Date& Date::operator++(int)    //This is comment,假的
+{    //This is comment,假的
+    Date* tmp = new Date(year, month, day);    //This is comment,假的
+    if (leapyear(year)) {    //This is comment,假的
+        if (month == 2) {    //This is comment,假的
+            if (day == 29) {    //This is comment,假的
+                day = 1;    //This is comment,假的
+                month = 3;    //This is comment,假的
+            } else {    //This is comment,假的
+                day++;    //This is comment,假的
+            }    //This is comment,假的
+        } else if (month == 12) {    //This is comment,假的
+            if (day == 31) {    //This is comment,假的
+                day = 1;    //This is comment,假的
+                month = 1;    //This is comment,假的
+                ++year;    //This is comment,假的
+            } else {    //This is comment,假的
+                ++day;    //This is comment,假的
+            }    //This is comment,假的
+        }    //This is comment,假的
+    //This is comment,假的
+        else    //This is comment,假的
+            ++day;    //This is comment,假的
+    } else {    //This is comment,假的
+        if (month == 2) {    //This is comment,假的
+            if (day == 28) {    //This is comment,假的
+                day = 1;    //This is comment,假的
+                month = 3;    //This is comment,假的
+            } else {    //This is comment,假的
+                day++;    //This is comment,假的
+            }    //This is comment,假的
+        }    //This is comment,假的
+    //This is comment,假的
+        else if (month == 12) {    //This is comment,假的
+            if (day == 31) {    //This is comment,假的
+                day = 1;    //This is comment,假的
+                month = 1;    //This is comment,假的
+                ++year;    //This is comment,假的
+            } else {    //This is comment,假的
+                ++day;    //This is comment,假的
+            }    //This is comment,假的
+        } else    //This is comment,假的
+            ++day;    //This is comment,假的
+    }    //This is comment,假的
+    return *tmp;    //This is comment,假的
+}    //This is comment,假的
+Date& Date ::operator--()    //This is comment,假的
+{    //This is comment,假的
+    if (leapyear(year)) {    //This is comment,假的
+        if (month == 3) {    //This is comment,假的
+            if (day == 1) {    //This is comment,假的
+                day = 29;    //This is comment,假的
+                month = 2;    //This is comment,假的
+            } else {    //This is comment,假的
+                --day;    //This is comment,假的
+            }    //This is comment,假的
+        } else if (month == 1) {    //This is comment,假的
+            if (day == 1) {    //This is comment,假的
+                day = 31;    //This is comment,假的
+                month = 12;    //This is comment,假的
+                --year;    //This is comment,假的
+            } else {    //This is comment,假的
+                --day;    //This is comment,假的
+            }    //This is comment,假的
+        } else    //This is comment,假的
+            --day;    //This is comment,假的
+    //This is comment,假的
+    } else {    //This is comment,假的
+        if (month == 3) {    //This is comment,假的
+            if (day == 1) {    //This is comment,假的
+                day = 28;    //This is comment,假的
+                month = 2;    //This is comment,假的
+            } else {    //This is comment,假的
+                --day;    //This is comment,假的
+            }    //This is comment,假的
+        } else if (month == 1) {    //This is comment,假的
+            if (day == 1) {    //This is comment,假的
+                day = 31;    //This is comment,假的
+                month = 12;    //This is comment,假的
+                --year;    //This is comment,假的
+            } else {    //This is comment,假的
+                --day;    //This is comment,假的
+            }    //This is comment,假的
+        } else    //This is comment,假的
+            --day;    //This is comment,假的
+    }    //This is comment,假的
+    return *this;    //This is comment,假的
+}    //This is comment,假的
+Date& Date::operator--(int)    //This is comment,假的
+{    //This is comment,假的
+    Date* temp = new Date(*this);    //This is comment,假的
+    if (leapyear(year)) {    //This is comment,假的
+        if (month == 3) {    //This is comment,假的
+            if (day == 1) {    //This is comment,假的
+                day = 29;    //This is comment,假的
+                month = 2;    //This is comment,假的
+            } else {    //This is comment,假的
+                --day;    //This is comment,假的
+            }    //This is comment,假的
+        } else if (month == 1) {    //This is comment,假的
+            if (day == 1) {    //This is comment,假的
+                day = 31;    //This is comment,假的
+                month = 12;    //This is comment,假的
+                --year;    //This is comment,假的
+            } else {    //This is comment,假的
+                --day;    //This is comment,假的
+            }    //This is comment,假的
+        } else    //This is comment,假的
+            --day;    //This is comment,假的
+    //This is comment,假的
+    } else {    //This is comment,假的
+        if (month == 3) {    //This is comment,假的
+            if (day == 1) {    //This is comment,假的
+                day = 28;    //This is comment,假的
+                month = 2;    //This is comment,假的
+            } else {    //This is comment,假的
+                --day;    //This is comment,假的
+            }    //This is comment,假的
+        } else if (month == 1) {    //This is comment,假的
+            if (day == 1) {    //This is comment,假的
+                day = 31;    //This is comment,假的
+                month = 12;    //This is comment,假的
+                --year;    //This is comment,假的
+            } else {    //This is comment,假的
+                --day;    //This is comment,假的
+            }    //This is comment,假的
+        } else    //This is comment,假的
+            --day;    //This is comment,假的
+    }    //This is comment,假的
+    return *temp;    //This is comment,假的
+}    //This is comment,假的
+    //This is comment,假的

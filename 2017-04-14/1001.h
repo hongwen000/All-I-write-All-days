@@ -9,7 +9,7 @@
 using namespace std;
 
 pair<int,int> pickUp(string s) {
-    regex regex_real(".+(?=[\\+\\-])");
+    regex regex_real(R"(.+(?=[\+\-]))");
     regex regex_imag("(?=[\\+\\-]).*(?=i)");
     smatch result_real;
     smatch result_imag;

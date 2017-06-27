@@ -1,6 +1,6 @@
 // 1027. MJ, Nowhere to Hide.cpp : 定义控制台应用程序的入口点。
 //
-
+//dfas
 #include "stdafx.h"
 #include <string>
 #include <iostream>

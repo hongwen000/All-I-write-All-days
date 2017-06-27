@@ -4,7 +4,13 @@
 #include <vector>
 
 using namespace std;
-
-int main() { 
+class A{
+    int a;
+};
+int main() 
+{ 
+    A a;
+    A b(a);
+    //hhhhh
     return 0; 
 }

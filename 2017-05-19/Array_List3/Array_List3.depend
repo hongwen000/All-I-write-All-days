@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1495208850 source:c:\users\lixin\desktop\acm-icpc\2017-05-19\array list2\arraylist.cpp
+	"ArrayList.hpp"
+
+1494740800 c:\users\lixin\desktop\acm-icpc\2017-05-19\array list2\arraylist.hpp
+	<cstddef>
+
+1495208568 source:c:\users\lixin\desktop\acm-icpc\2017-05-19\array list2\main.cpp
+	<iostream>
+	<cstdlib>
+	"ArrayList.hpp"
+

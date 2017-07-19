@@ -12,6 +12,9 @@ using std::thread;
 using std::cin;
 using std::getline;
 using std::unique_lock;
+using std::endl;
+using std::cout;
+using std::map;
 
 static mutex mut;
 static string cmd;
@@ -31,7 +34,7 @@ void input()
 }
 struct capture {
 private:
-    Record record;
+    Record _record;
     unique_lock<mutex> lk(mut);
     map<string, int> commands= {
         {"", 1},
@@ -52,39 +55,38 @@ private:
         if(commands.find(option) == commands.end())
         {
             cout << "Wrong Input" << endl;
-            continue;
         }
         else
         {
-            switch(opinion)
+            switch(option)
             {
                 case 1: break;
                 case 2: {
                     try {
-                        record.close();
+                        _record.close();
                     }
                     catch(std::logic_error)
                     {
-                        record.stopRecord();
-                        record.close();
+                        _record.stopRecord();
+                        _record.close();
                     }
                     flag_stop = true;
                     break;
                 }
                 case 3: {
-                    record.stopRecord();
+                    _record.stopRecord();
                     break;
                 }
                 case 4: {
-                    auto file_name = tmp_cmd.substr(command.find(" ") + 1); 
-                    record.startRecord(file_name);
+                    auto file_name = tmp_cmd.substr(tmp_cmd.find(" ") + 1); 
+                    _record.startRecord(file_name);
                     break;
                 }
             }
         }
     }
 public:
-    void operator()
+    void operator(void)
     {
         bool flag_stop = false;
         record.open();

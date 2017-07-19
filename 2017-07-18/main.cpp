@@ -4,11 +4,14 @@
 #include <string>
 #include <thread>
 #include <map>
+#include <mutex>
 
-using std::map;
+using std::mutex;
 using std::string;
-using std::getline;
 using std::thread;
+using std::cin;
+using std::getline;
+using std::unique_lock;
 
 static mutex mut;
 static string cmd;
@@ -29,43 +32,54 @@ void input()
 struct capture {
 private:
     Record record;
+    unique_lock<mutex> lk(mut);
     map<string, int> commands= {
         {"", 1},
         {"quit", 2},
         {"stop", 3},
         {"start", 4}
-    }
+    };
     void reset()
     {
         lk.lock();
         cmd = "";
         lk.unlock();
     }
-    void process(int opinion)
+
+    void process(string tmp_cmd)
     {
-        switch(opinion)
+        auto option = tmp_cmd.substr(0, tmp_cmd.find(""));
+        if(commands.find(option) == commands.end())
         {
-            case 1: continue;
-            case 2: {
-                try {
-                    record.close();
+            cout << "Wrong Input" << endl;
+            continue;
+        }
+        else
+        {
+            switch(opinion)
+            {
+                case 1: break;
+                case 2: {
+                    try {
+                        record.close();
+                    }
+                    catch(std::logic_error)
+                    {
+                        record.stopRecord();
+                        record.close();
+                    }
+                    flag_stop = true;
+                    break;
                 }
-                catch(std::logic_error)
-                {
+                case 3: {
                     record.stopRecord();
-                    record.close();
+                    break;
                 }
-                flag_stop = true;
-                break;
-            }
-            case 3: {
-                record.stopRecord();
-                continue;
-            }
-            case 4: {
-                auto file_name = tmp_cmd.substr(command.find(" ") + 1); 
-                record.startRecord(file_name);
-                continue;
+                case 4: {
+                    auto file_name = tmp_cmd.substr(command.find(" ") + 1); 
+                    record.startRecord(file_name);
+                    break;
+                }
             }
         }
     }
@@ -76,20 +90,10 @@ public:
         record.open();
         while(!flag_stop)
         {
-            unique_lock<mutex> lk(mut);
             lk.lock();
             auto tmp_cmd = cmd;
             lk.unlock();
-            auto option = tmp_cmd.substr(0, tmp_cmd.find(""));
-            if(commands.find(option) == commands.end())
-            {
-                cout << "Wrong Input" << endl;
-                continue;
-            }
-            else
-            {
-                process(commands[option]);
-            }
+            process(tmp_cmd);
             reset();
         }
     }

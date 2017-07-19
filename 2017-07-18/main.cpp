@@ -35,6 +35,7 @@ void input()
 struct capture {
 private:
     Record _record;
+    bool flag_stop;
     unique_lock<mutex> lk(mut);
     map<string, int> commands= {
         {"", 1},
@@ -58,7 +59,7 @@ private:
         }
         else
         {
-            switch(option)
+            switch(commands[option])
             {
                 case 1: break;
                 case 2: {
@@ -88,7 +89,7 @@ private:
 public:
     void operator(void)
     {
-        bool flag_stop = false;
+        flag_stop = false;
         record.open();
         while(!flag_stop)
         {

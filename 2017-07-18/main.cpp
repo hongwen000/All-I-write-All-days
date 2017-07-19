@@ -32,6 +32,7 @@ void input()
             break;
     }
 }
+
 struct capture {
 private:
     Record _record;
@@ -43,6 +44,7 @@ private:
         {"stop", 3},
         {"start", 4}
     };
+
     void reset()
     {
         lk.lock();
@@ -101,6 +103,7 @@ public:
         }
     }
 };
+
 int main(){
 
 }

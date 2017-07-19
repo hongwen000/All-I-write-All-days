@@ -6,28 +6,17 @@
 #include <mutex>
 #include <condition_variable>
 #include "inc/Record.h"
-using namespace std;
-using std::mutex;
-using std::move;
-using std::string;
-using std::thread;
-using std::cin;
-using std::getline;
-using std::unique_lock;
-using std::endl;
-using std::cout;
-using std::map;
 
-mutex mut;
-string cmd;
+std::mutex mut;
+std::string cmd;
 
 void input()
 {
     while(1)
     {
-        string tmp_cmd;
-        getline(cin, tmp_cmd);
-        unique_lock<mutex> lk(mut);
+        std::string tmp_cmd;
+        std::getline(std::cin, tmp_cmd);
+        std::unique_lock<std::mutex> lk(mut);
         cmd = tmp_cmd;
         lk.unlock();
         if(tmp_cmd == "quit")
@@ -37,40 +26,34 @@ void input()
 
 struct Capture {
 private:
-    unique_lock<mutex> lk;
+    bool flag_out_from_record;
     Record _record;
     bool flag_stop;
-    map<string, int> commands= {
+    std::map<std::string, int> commands= {
         {"", 1},
         {"quit", 2},
         {"stop", 3},
         {"start", 4}
     };
-    void reset()
+
+    void process(std::string tmp_cmd, std::mutex& mut, std::string& cmd)
     {
-        lk.lock();
-        cmd = "";
-        lk.unlock();
-    }
-    void process(string tmp_cmd)
-    {
-        if(tmp_cmd != "")
-        cout << "I got" << tmp_cmd << endl;
-        auto option = tmp_cmd.substr(0, tmp_cmd.find(""));
+        std::string option = tmp_cmd.substr(0, tmp_cmd.find(" "));
         if(commands.find(option) == commands.end())
         {
-            cout << "Wrong Input" << endl;
+            std::cerr << "Wrong Input" << std::endl;
         }
         else
         {
-            switch(commands[option])
+            auto i = commands[option];
+            switch(i)
             {
                 case 1: break;
                 case 2: {
                     try {
                         _record.close();
                     }
-                    catch(std::logic_error)
+                    catch(std::logic_error&)
                     {
                         _record.stopRecord();
                         _record.close();
@@ -83,36 +66,38 @@ private:
                     break;
                 }
                 case 4: {
-                    auto file_name = tmp_cmd.substr(tmp_cmd.find(" ") + 1); 
-                    _record.startRecord(file_name);
+                    flag_out_from_record = _record.startRecord(tmp_cmd, mut, cmd);
                     break;
                 }
+                default: break;
             }
         }
     }
 public:
-    Capture()
-    {
-        lk = unique_lock<mutex>(mut, defer_lock);
-    }
+    Capture() : flag_out_from_record(false)
+    {}
     void operator()()
     {
         flag_stop = false;
         _record.open();
         while(!flag_stop)
         {
-            lk.lock();
+            std::unique_lock<std::mutex> lk(mut);
             auto tmp_cmd = cmd;
+            process(tmp_cmd, mut, cmd);
+            if(flag_out_from_record == true)
+                flag_out_from_record = false;
+            else
+                cmd = "";
             lk.unlock();
-            process(tmp_cmd);
-            reset();
         }
     }
 };
 
-int main(){
-    thread t1(Capture{});
-    thread t2(input);
+int main()
+{
+    std::thread t1(Capture{});
+    std::thread t2(input);
     t1.join();
     t2.join();
 }

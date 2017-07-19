@@ -5,27 +5,23 @@
 #include <mutex>
 #include <stdexcept>
 
-using cv::Mat;
-using cv::VideoCapture;
-using cv::VideoWriter;
-
 class Record {
 public:
     Record() :
-        _flag_stop{false}
+        _flag_stop{true}
         {}
     bool open();
-    bool startRecord(std::string file_name); 
-    void stopRecord();
+    bool startRecord(std::string tmp_cmd, std::mutex& mut, std::string& cmd); 
+    bool stopRecord();
     bool close();
 private:
-    VideoCapture _camera;
-    VideoWriter _video;
+    cv::VideoCapture _camera;
+    cv::VideoWriter _video;
     int _frame_width;
     int _frame_height;
     bool _flag_stop;
-    const int _video_format = CV_FOURCC('M', 'P', '4', '2');
-    static constexpr auto  _video_fps = 30;
+    const int _video_format = CV_FOURCC('M','J','P','G');
+    static constexpr auto  _video_fps = 10;
     static constexpr auto _is_colored = true;
     bool isStoped();
 };

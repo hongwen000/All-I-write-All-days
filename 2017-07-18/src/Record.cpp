@@ -1,22 +1,26 @@
+#include <mutex>
+#include <stdexcept>
 #include "../inc/Record.h"
-
-bool isStoped()
+#include "opencv2/opencv.hpp"
+using std::mutex;
+using std::lock_guard;
+using std::unique_lock;
+using std::string;
+bool Record::isStoped()
 {
-    lock_guard<mutex> lk(_mut);
     return _flag_stop;
 }
 bool Record::open() 
 {
-    if(_camera.isOpen())
+    if(_camera.isOpened())
         return false;
-    _camera(0);
+    _camera = VideoCapture(0);
     _frame_width = _camera.get(CV_CAP_PROP_FRAME_WIDTH);
     _frame_height = _camera.get(CV_CAP_PROP_FRAME_HEIGHT);
-    is_opened = _camera.isOpened();
-    return is_opened;
+    return  _camera.isOpened();
 }
 
-bool startRecord(string file_name)
+bool Record::startRecord(string file_name)
 {
     if(!_camera.isOpened() || _video.isOpened() || !isStoped())
         return false;
@@ -36,16 +40,15 @@ bool startRecord(string file_name)
     }
 }
 
-void stopRecord()
+void Record::stopRecord()
 {
-    lock_guard<mutex> lk(mut);
     _flag_stop = true;
 }
 
-bool close()
+bool Record::close()
 {
-    if(_video.isOpen() || !isStoped())
-        throw logic_error("Still Recording");
+    if(_video.isOpened() || !isStoped())
+        throw std::logic_error("Still Recording");
     _camera.release();
-    return !_camera.isOpen();
+    return !_camera.isOpened();
 }

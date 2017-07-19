@@ -1,12 +1,14 @@
-#include "inc/Record.h"
 #include <algorithm>
 #include <iostream>
 #include <string>
 #include <thread>
 #include <map>
 #include <mutex>
-
+#include <condition_variable>
+#include "inc/Record.h"
+using namespace std;
 using std::mutex;
+using std::move;
 using std::string;
 using std::thread;
 using std::cin;
@@ -16,8 +18,8 @@ using std::endl;
 using std::cout;
 using std::map;
 
-static mutex mut;
-static string cmd;
+mutex mut;
+string cmd;
 
 void input()
 {
@@ -33,27 +35,27 @@ void input()
     }
 }
 
-struct capture {
+struct Capture {
 private:
+    unique_lock<mutex> lk;
     Record _record;
     bool flag_stop;
-    unique_lock<mutex> lk(mut);
     map<string, int> commands= {
         {"", 1},
         {"quit", 2},
         {"stop", 3},
         {"start", 4}
     };
-
     void reset()
     {
         lk.lock();
         cmd = "";
         lk.unlock();
     }
-
     void process(string tmp_cmd)
     {
+        if(tmp_cmd != "")
+        cout << "I got" << tmp_cmd << endl;
         auto option = tmp_cmd.substr(0, tmp_cmd.find(""));
         if(commands.find(option) == commands.end())
         {
@@ -89,10 +91,14 @@ private:
         }
     }
 public:
-    void operator(void)
+    Capture()
+    {
+        lk = unique_lock<mutex>(mut, defer_lock);
+    }
+    void operator()()
     {
         flag_stop = false;
-        record.open();
+        _record.open();
         while(!flag_stop)
         {
             lk.lock();
@@ -105,5 +111,8 @@ public:
 };
 
 int main(){
-
+    thread t1(Capture{});
+    thread t2(input);
+    t1.join();
+    t2.join();
 }

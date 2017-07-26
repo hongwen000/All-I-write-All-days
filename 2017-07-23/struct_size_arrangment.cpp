@@ -1,3 +1,4 @@
+#define std TheCppStandard
 #include <iostream>
 using namespace std;
 typedef struct  __attribute__((packed))

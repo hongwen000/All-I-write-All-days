@@ -1,15 +1,14 @@
-#include <string>
-#include <iostream>
-using namespace std;
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+
+using namespace cv;
+
 int main()
 {
-    while(1)
-    {
-        string command;
-        getline(cin, command);
-        cout << command.substr(0, command.find(" ")) << endl;
-        cout << command.substr(command.find(" ") + 1) << endl;
-    }
+    Mat image;// new blank image
+    image = cv::imread("test.jpg");// read the file
+    namedWindow( "Display window", CV_WINDOW_AUTOSIZE );// create a window for display.
+    imshow( "Display window", image );// show our image inside it.
+    waitKey(0);// wait for a keystroke in the window
+    return 0;
 }
-
-

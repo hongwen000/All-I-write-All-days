@@ -1,32 +1,167 @@
 #include <iostream>
+#include <list>
+#include <iterator>
+#include <algorithm>
+
 using namespace std;
-struct BiTree {
-    BiTree() : BiTree(0) {};
-    BiTree(int n) : key(n), lchid(nullptr), rchid(nullptr) {};
+struct node {
+    node() : key(0), lchild(0), rchild(0), parent(0) {}
+    node(int x): key(x), lchild(0), rchild(0), parent(0) {}
+    node(int x, int y): key(x), lchild(0), rchild(0), parent(0), data(y) {}
+    ~node() {
+        if(lchild)
+            delete lchild;
+        if(rchild)
+            delete rchild;
+    }
     int key;
-    BiTree* lchid;
-    BiTree* rchid;
+    node* lchild;
+    node* rchild;
+    node* parent;
+    int data;
 };
 
-void insertBST(BiTree *T, BiTree *S) {
-    BiTree* p;
-    BiTree* q;
-    if(T == nullptr) 
-        T = S;
+using tree = node;
+
+void insert(tree *T, int k){
+    node* x = new node(k);
+    if(!T)
+        T = new node(k);
     else {
-        p = T;
-        while(p) {
-            q = p;
-            if(S->key < p->key)
-                p = p->lchid;
+        node * parent = T;
+        node * iterator = T;
+        while(iterator) {
+            parent = iterator;
+            if(x->key < iterator->key)
+                iterator = iterator->lchild;
             else
-                p = p->rchid;
+                iterator = iterator->rchild;
         }
-        if(S->key < q->key)
-            q->lchid = S;
+        x->parent = parent;
+        if(parent == nullptr)
+            return;
+        else if(x->key < parent->key)
+            parent->lchild = x;
         else
-            q->rchid = S;
+            parent->rchild = x;
     }
 }
 
+node* insertRecur(tree *T, int k) {
+    if(!T)
+        T = new tree(k);
+    else if (k < T->key)
+        T->lchild = insertRecur(T->lchild, k);
+    else
+        T->rchild = insertRecur(T->rchild, k);
+    return T;
+}
 
+template<typename F>
+tree* Tmap(tree* T, F func) {
+    if(!T)
+        return T;
+    else {
+        T->lchild = Tmap(T->lchild, func);
+        T->key    = func(T->key);
+        T->rchild = Tmap(T->rchild, func);
+        return T;
+    }
+}
+
+tree* toTree(const list<int>& lst) {
+    if(lst.empty()) return NULL;
+    tree * T = new tree(lst.front());
+    for(auto i = lst.cbegin(); i != lst.end(); ++i)
+        insert(T, *i);
+    return T;
+}
+
+list<int> toList(tree* T) {
+    list<int> ret;
+    auto func = [&](int key) {
+        ret.push_back(key);
+        return key;
+    };
+    Tmap(T, func);
+    return ret;
+}
+
+tree* rebuildTree(int *prefix, int* infix, int n) {
+    if(n == 0) return NULL;
+    node *root = new node(prefix[0]);
+    if(n == 1) return root;
+    int p = find(infix, infix + n, prefix[0]) - infix;
+    root->lchild = rebuildTree(prefix + 1, infix, p);
+    root->rchild = rebuildTree(prefix + p + 1, infix + p + 1, n - p - 1);
+    return root;
+}
+
+int search_recv(tree* T, int data) {
+    if(!T)                  return -1;
+    if(T->data == data)     return T->key;
+    else if(data > T->data) return search_recv(T->rchild, data);
+    else                    return search_recv(T->lchild, data);
+}
+
+int search(tree* T, int data) {
+    while(T && T->data != data) {
+        if(T->data > data) T = T->lchild;
+        else T = T->rchild;
+    }
+    return T ? T->key : -1;
+}
+
+tree* min(tree* T) {
+    while(T->lchild) T = T->lchild;
+    return T;
+}
+
+tree* max(tree* T) {
+    while(T->rchild) T = T->rchild;
+    return T;
+}
+
+node* succ(node* T) {
+    if(T->rchild)   return min(T->rchild);
+    else {
+        auto p = T->parent;
+        while(p && T == p->rchild) {
+            T = p;
+            p = p->parent;
+        }
+        return p;
+    }
+}
+
+node* pred(node* T) {
+    if(T->lchild)   return max(T->lchild);
+    else {
+        auto p = T->parent;
+        while(p && T == p->lchild) {
+            T = p;
+            p = p->parent;
+        }
+        return p;
+    }
+}
+
+int main() {
+    int prefix[] = {1, 2, 4, 3, 5, 6};
+    int infix[] = {4, 2, 1, 5, 3, 6};
+    tree* T = rebuildTree(prefix, infix, 6);
+    auto lst = toList(T);
+    for(auto i : lst)
+        cout  << i << ' ';
+    cout << endl;
+    list<int> lst2 = {45,12,45,26,73,2,56};
+    auto T2 = toTree(lst2);
+    auto lst2_sorted = toList(T2);
+    for(auto i : lst2_sorted)
+        cout  << i << ' ';
+    cout << endl;
+    for(auto it = min(T); it != NULL; it = succ(it))
+        cout << it->key << ' ';
+    delete T;
+    delete T2;
+}

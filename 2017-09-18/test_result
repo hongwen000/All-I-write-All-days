@@ -1,0 +1,25 @@
+GHCi, version 8.0.2: http://www.haskell.org/ghc/  :? for help
+[1 of 1] Compiling MyFraction       ( test.hs, interpreted )
+Ok, modules loaded: MyFraction.
+*MyFraction>     quickCheck prop_ratplus_commutativity
++++ OK, passed 100 tests.
+*MyFraction>     quickCheck prop_ratplus_associativity
++++ OK, passed 100 tests.
+*MyFraction>     quickCheck prop_ratplus_unit
++++ OK, passed 100 tests.
+*MyFraction>     quickCheck prop_ratminus_reverse
++++ OK, passed 100 tests.
+*MyFraction>     quickCheck prop_ratminus_anticommutativity
++++ OK, passed 100 tests.
+*MyFraction>     quickCheck prop_rattimes_commutativity
++++ OK, passed 100 tests.
+*MyFraction>     quickCheck prop_rattimes_plus_distr
++++ OK, passed 100 tests.
+*MyFraction>     quickCheck prop_rattimes_associativity
++++ OK, passed 100 tests.
+*MyFraction>     quickCheck prop_rattimes_unit
++++ OK, passed 100 tests.
+*MyFraction>     quickCheck prop_ratdiv_reverse
++++ OK, passed 100 tests.
+*MyFraction>     quickCheck prop_ratdiv_anticommutativity
++++ OK, passed 100 tests.

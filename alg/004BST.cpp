@@ -2,6 +2,7 @@
 #include <list>
 #include <iterator>
 #include <algorithm>
+#include <stack>
 
 using namespace std;
 struct node {
@@ -87,13 +88,24 @@ list<int> toList(tree* T) {
     return ret;
 }
 
-tree* rebuildTree(int *prefix, int* infix, int n) {
+tree* rebuildTree(int *prefix, int* infix, int n, node* parent = NULL) {
     if(n == 0) return NULL;
     node *root = new node(prefix[0]);
+    root->parent = parent;
     if(n == 1) return root;
     int p = find(infix, infix + n, prefix[0]) - infix;
-    root->lchild = rebuildTree(prefix + 1, infix, p);
-    root->rchild = rebuildTree(prefix + p + 1, infix + p + 1, n - p - 1);
+    root->lchild = rebuildTree(prefix + 1, infix, p, root);
+    root->rchild = rebuildTree(prefix + p + 1, infix + p + 1, n - p - 1, root);
+    return root;
+}
+
+tree* rebuildTreePofix(int *pofix, int* infix, int n) {
+    if(n == 0) return NULL;
+    node* root = new node(pofix[n - 1]);
+    if(n == 1) return root;
+    int p = find(infix, infix + n, pofix[n - 1]) - infix;
+    root->lchild = rebuildTreePofix(pofix, infix, p);
+    root->rchild = rebuildTreePofix(pofix + p, infix + p + 1, n - p - 1);
     return root;
 }
 
@@ -146,13 +158,64 @@ node* pred(node* T) {
     }
 }
 
+void preOrderIter(tree *T) {
+    stack<node*> S;
+    node* x = T;
+    while(true) {
+        while(x) {
+            cout << x->key << ' ';
+            S.push(x->rchild);
+            x = x->lchild;
+        }
+        if(S.empty())   break;
+        x = S.top();
+        S.pop();
+    }
+}
+
+void inOrderIter_1(tree *T) {
+    stack<node*> S;
+    node* x = T;
+    while(true) {
+        while(x) {
+            S.push(x);
+            x = x->lchild;
+        }
+        if(S.empty()) break;
+        x = S.top();
+        S.pop();
+        cout << x->key << ' ';
+        x = x->rchild;
+    }
+}
+
+void inOrderIter_2(tree *T) {
+    bool backtrace = false;
+    while(true)
+        if(!backtrace && T->lchild)
+            T = T->lchild;
+        else {
+            cout << T->key << ' ';
+            if(T->rchild) {
+                T = T->rchild;
+                backtrace = false;
+            } else {
+                T = succ(T);
+                if(!T) break;
+                backtrace = true;
+            }
+        }
+}
+
 int main() {
-    int prefix[] = {1, 2, 4, 3, 5, 6};
+    int prefix[] = {2, 4, 3, 5, 1, 6};
     int infix[] = {4, 2, 1, 5, 3, 6};
     tree* T = rebuildTree(prefix, infix, 6);
     auto lst = toList(T);
     for(auto i : lst)
         cout  << i << ' ';
+    cout << endl;
+    inOrderIter_2(T);
     cout << endl;
     list<int> lst2 = {45,12,45,26,73,2,56};
     auto T2 = toTree(lst2);
@@ -160,8 +223,6 @@ int main() {
     for(auto i : lst2_sorted)
         cout  << i << ' ';
     cout << endl;
-    for(auto it = min(T); it != NULL; it = succ(it))
-        cout << it->key << ' ';
     delete T;
     delete T2;
 }

@@ -4,6 +4,7 @@
 #include <sstream>
 #include <cmath>
 #include <string>
+#include <cstdlib>
 
 void TD2H (double temperature, double dewpoint) {
     double e = 6.11 * std::pow(E, 5417.7530 * ((1/273.16) - (1/(dewpoint+273.16))));
@@ -38,17 +39,17 @@ int main() {
         std::stringstream ss(str);
         ss >> s1 >> s2 >> s3 >> s4;
         if(s1 == "T" && s3 == "D") 
-            TD2H(std::stod(s2), std::stod(s4));
+            TD2H(std::atof(s2.c_str()), std::atof(s4.c_str()));
         else if(s1 == "T" && s3 == "H") 
-            TH2D(std::stod(s2), std::stod(s4));
-        else if(s1 == "T" && s3 == "D") 
-            TD2H(std::stod(s2), std::stod(s4));
+            TH2D(std::atof(s2.c_str()), std::atof(s4.c_str()));
+        else if(s1 == "D" && s3 == "H") 
+            DH2T(std::atof(s2.c_str()), std::atof(s4.c_str()));
         else if(s1 == "D" && s3 == "T") 
-            TD2H(std::stod(s4), std::stod(s2));
+            TD2H(std::atof(s4.c_str()), std::atof(s2.c_str()));
         else if(s1 == "H" && s3 == "T") 
-            TD2H(std::stod(s4), std::stod(s2));
+            TH2D(std::atof(s4.c_str()), std::atof(s2.c_str()));
         else
-            TD2H(std::stod(s4), std::stod(s2));
+            DH2T(std::atof(s4.c_str()), std::atof(s2.c_str()));
     }
     return 0;
 }

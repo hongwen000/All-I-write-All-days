@@ -6,20 +6,20 @@
 using namespace std;
 struct node {
     node() : node(0){}
-    node(int x, int y = 0): key(x), lchild(0), rchild(0), parent(0), data(y), l_is_child(true), r_is_child(true){}
+    node(int x, int y = 0): key(x), lch(0), rch(0), parent(0), data(y), left_side_pointer_points_to_left_side_child(true), right_side_pointer_points_to_right_side_child(true){}
     ~node() {
-        if(lchild && l_is_child)
-            delete lchild;
-        if(rchild && r_is_child)
-            delete rchild;
+        if(lch && left_side_pointer_points_to_left_side_child)
+            delete lch;
+        if(rch && right_side_pointer_points_to_right_side_child)
+            delete rch;
     }
     int key;
-    node* lchild;
-    node* rchild;
+    node* lch;
+    node* rch;
     node* parent;
     int data;
-    bool l_is_child;
-    bool r_is_child;
+    bool left_side_pointer_points_to_left_side_child;
+    bool right_side_pointer_points_to_right_side_child;
 };
 
 using tree = node;
@@ -34,17 +34,17 @@ void insert(tree *T, int k){
         while(iterator) {
             parent = iterator;
             if(x->key < iterator->key)
-                iterator = iterator->lchild;
+                iterator = iterator->lch;
             else
-                iterator = iterator->rchild;
+                iterator = iterator->rch;
         }
         x->parent = parent;
         if(parent == nullptr)
             return;
         else if(x->key < parent->key)
-            parent->lchild = x;
+            parent->lch = x;
         else
-            parent->rchild = x;
+            parent->rch = x;
     }
 }
 
@@ -52,10 +52,21 @@ node* insertRecur(tree *T, int k) {
     if(!T)
         T = new tree(k);
     else if (k < T->key)
-        T->lchild = insertRecur(T->lchild, k);
+        T->lch = insertRecur(T->lch, k);
     else
-        T->rchild = insertRecur(T->rchild, k);
+        T->rch = insertRecur(T->rch, k);
     return T;
+}
+
+int search_node(tree* T, int data) {
+    while(T && T->data != data) {
+        if(T->data > data) T = T->lch;
+        else T = T->rch;
+    }
+    return T ? T->key : -1;
+}
+void delete_key(tree *T, int k) {
+    
 }
 
 template<typename F>
@@ -63,9 +74,9 @@ tree* Tmap(tree* T, F func) {
     if(!T)
         return T;
     else {
-        T->lchild = Tmap(T->lchild, func);
+        T->lch = Tmap(T->lch, func);
         T->key    = func(T->key);
-        T->rchild = Tmap(T->rchild, func);
+        T->rch = Tmap(T->rch, func);
         return T;
     }
 }
@@ -93,41 +104,41 @@ tree* rebuildTree(int *prefix, int* infix, int n) {
     node *root = new node(prefix[0]);
     if(n == 1) return root;
     int p = find(infix, infix + n, prefix[0]) - infix;
-    root->lchild = rebuildTree(prefix + 1, infix, p);
-    root->rchild = rebuildTree(prefix + p + 1, infix + p + 1, n - p - 1);
+    root->lch = rebuildTree(prefix + 1, infix, p);
+    root->rch = rebuildTree(prefix + p + 1, infix + p + 1, n - p - 1);
     return root;
 }
 
 int search_recv(tree* T, int data) {
     if(!T)                  return -1;
     if(T->data == data)     return T->key;
-    else if(data > T->data) return search_recv(T->rchild, data);
-    else                    return search_recv(T->lchild, data);
+    else if(data > T->data) return search_recv(T->rch, data);
+    else                    return search_recv(T->lch, data);
 }
 
 int search(tree* T, int data) {
     while(T && T->data != data) {
-        if(T->data > data) T = T->lchild;
-        else T = T->rchild;
+        if(T->data > data) T = T->lch;
+        else T = T->rch;
     }
     return T ? T->key : -1;
 }
 
 tree* min(tree* T) {
-    while(T->lchild) T = T->lchild;
+    while(T->lch) T = T->lch;
     return T;
 }
 
 tree* max(tree* T) {
-    while(T->rchild) T = T->rchild;
+    while(T->rch) T = T->rch;
     return T;
 }
 
 node* succ(node* T) {
-    if(T->rchild)   return min(T->rchild);
+    if(T->rch)   return min(T->rch);
     else {
         auto p = T->parent;
-        while(p && T == p->rchild) {
+        while(p && T == p->rch) {
             T = p;
             p = p->parent;
         }
@@ -136,10 +147,10 @@ node* succ(node* T) {
 }
 
 node* pred(node* T) {
-    if(T->lchild)   return max(T->lchild);
+    if(T->lch)   return max(T->lch);
     else {
         auto p = T->parent;
-        while(p && T == p->lchild) {
+        while(p && T == p->lch) {
             T = p;
             p = p->parent;
         }
@@ -150,41 +161,61 @@ node* pre = NULL;
 
 void threadizeWorker(tree* T){
     if(T) {
-    threadizeWorker(T->lchild);
-    if(T->lchild == NULL) {
-        T->l_is_child = false;
-        T->lchild = pre;
+    threadizeWorker(T->lch);
+    if(T->lch == NULL) {
+        T->left_side_pointer_points_to_left_side_child = false;
+        T->lch = pre;
     }
-    if(pre && pre->rchild == NULL){
-        pre->r_is_child = false;
-        pre->rchild = T;
+    if(pre && pre->rch == NULL){
+        pre->right_side_pointer_points_to_right_side_child = false;
+        pre->rch = T;
     }
     pre = T;
-    threadizeWorker(T->rchild);
+    threadizeWorker(T->rch);
     }
 }
 
 
 node* threadPred(node* T) {
-    if(T->l_is_child == false)
-        return T->lchild;
+    if(T->left_side_pointer_points_to_left_side_child == false)
+        return T->lch;
     else {
-        auto p = T->lchild;
-        while(p->r_is_child)
-            p = p->rchild;
+        auto p = T->lch;
+        while(p->right_side_pointer_points_to_right_side_child)
+            p = p->rch;
         return p;
     }
 }
 
 node* threadSucc(node* T) {
-    if(T->r_is_child == false)
-        return T->rchild;
+    if(T->right_side_pointer_points_to_right_side_child == false)
+        return T->rch;
     else {
-        auto p = T->rchild;
-        while(p->l_is_child)
-            p = p->lchild;
+        auto p = T->rch;
+        while(p->left_side_pointer_points_to_left_side_child)
+            p = p->lch;
         return p;
     }
+}
+
+void threadTravel(node* T) {
+    if(!T) return;
+    node* p = T;
+    while(p->lch) p = p->lch;
+    cout << p->key << ' ';
+    while(p->rch) {
+        if(p->right_side_pointer_points_to_right_side_child == false) {
+            p = p->rch;
+            cout << p->key << ' ';
+        } else {
+            p = p->rch;
+            while(p->left_side_pointer_points_to_left_side_child) {
+                p = p->lch;
+            }
+            cout << p->key << ' ';
+        }
+    }
+    cout << endl;
 }
 
 int main() {
@@ -196,6 +227,9 @@ int main() {
         cout  << i << ' ';
     cout << endl;
     threadizeWorker(T);
+    threadTravel(T);
     auto p = min(T);
-    cout << p->key << ' ';
+    cout << p->key << endl;
+    auto plast = max(T);
+    cout << plast->key << endl;
 }

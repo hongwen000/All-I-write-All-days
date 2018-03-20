@@ -29,11 +29,13 @@ using namespace std;
 int main()
 {
     string s = "global";
-    std::cout << MD5_DIGEST_LENGTH << std::endl;
-    chat_message mes(4, 0, "1234567890123456", s);
-    std::cout << "Info: In watcher send func [" << (unsigned)mes.stage() << "/" << (unsigned)mes.total() <<
+    chat_message mes(4, 0, Thilo::md5("hhh"), "2018-03-18 15:09:12.003478", s);
+    std::cout << "Info:Send [" << (unsigned)mes.stage() << "/" << (unsigned)mes.total() <<
                 "] " << mes.md5() << ":" << mes.body() << std::endl;
+    std::cout << "Time is " << mes.time_stamp() << std::endl;
     chat_message new_mes(mes.data(), mes.length());
-    std::cout << "Info: In watcher send func [" << (unsigned)mes.stage() << "/" << (unsigned)mes.total() <<
+    std::cout << "Info:recv [" << (unsigned)mes.stage() << "/" << (unsigned)mes.total() <<
                 "] " << mes.md5() << ":" << mes.body() << std::endl;
+    std::cout << "Time is " << new_mes.time_stamp() << std::endl;
+    
 }

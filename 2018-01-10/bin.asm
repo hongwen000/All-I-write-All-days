@@ -1,0 +1,40 @@
+DATA 	SEGMENT
+NUM		DB	12H, 34H, 0ABH, 0CDH
+COUNT	EQU	$-NUM
+AFTER	DB	'B', 0DH, 0AH, '$'
+DATA	ENDS
+
+CODE	SEGMENT
+		;忘记了assume
+		ASSUME DS:DATA, CS:CODE
+BEGIN:	
+		MOV AX, DATA
+		MOV DS, AX
+		MOV CL, COUNT
+		LEA SI, NUM
+		CLD
+L1:		
+		MOV BH, 8
+		LODSB
+		MOV BL, AL
+L2:		
+		MOV DL, 30H
+		;SHL AL, 1 ❌，不可以这样，因为2号DOS程序会修改AL（神他妈）
+		SHL BL, 1
+		JNC	PRINT
+		ADD DL, 1
+PRINT:		
+		MOV AH, 02H
+		INT 21H
+		DEC BH
+		JNZ L2
+		;cout << 'B' << '\n'
+		LEA DX, AFTER
+		MOV AH, 09H
+		INT 21H
+		LOOP L1
+DONE:	
+		MOV AH, 4CH
+		INT 21H
+CODE 	ENDS
+		END BEGIN

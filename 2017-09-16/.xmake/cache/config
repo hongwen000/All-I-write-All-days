@@ -1,0 +1,89 @@
+
+{
+    ["options_2017-09-16"] = 
+    {
+        ["cxxflags"] = "-std=c++14"
+    }
+
+,   ["mtimes"] = 
+    {
+        ["xmake.lua"] = 1506244862
+    }
+
+,   ["options_4"] = 
+    {
+        ["cxxflags"] = "-std=c++14"
+    }
+
+,   ["options_3"] = 
+    {
+        ["cxxflags"] = "-std=c++14"
+    }
+
+,   ["options_con"] = 
+    {
+        ["cxxflags"] = "-std=c++14"
+    }
+
+,   ["options_17"] = 
+    {
+        ["cxxflags"] = "-std=c++14"
+    }
+
+,   ["options_fac"] = 
+    {
+        ["cxxflags"] = "-std=c++14"
+    }
+
+,   ["options_fjj"] = 
+    {
+        ["cxxflags"] = "-std=c++14"
+    }
+
+,   ["options_all"] = 
+    {
+        ["cxxflags"] = "-std=c++14"
+    }
+
+,   ["options_5"] = 
+    {
+        ["cxxflags"] = "-std=c++14"
+    }
+
+,   ["options_if"] = 
+    {
+        ["cxxflags"] = "-std=c++14"
+    }
+
+,   ["options_2"] = 
+    {
+        ["cxxflags"] = "-std=c++14"
+    }
+
+,   ["options_hhh"] = 
+    {
+        ["cxxflags"] = "-std=c++14"
+    }
+
+,   ["options_loop"] = 
+    {
+        ["cxxflags"] = "-std=c++14"
+    }
+
+,   ["options_calc"] = 
+    {
+        ["cxxflags"] = "-std=c++14"
+    }
+
+,   ["options_main"] = 
+    {
+        ["cxxflags"] = "-std=c++14"
+    }
+
+,   ["__version"] = "2.1.6"
+,   ["options_1"] = 
+    {
+        ["cxxflags"] = "-std=c++14"
+    }
+
+}

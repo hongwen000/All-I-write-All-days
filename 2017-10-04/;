@@ -1,0 +1,60 @@
+%{
+#include "token.h"
+#include <iostream>
+#define YYSTYPE std::string
+#define OP_ASSIGN       0x00000
+#define OP_TEST_EQUAL   0x00001
+#define OP_PRINT        0x00010
+extern "C" {
+    void yyerror (char const *s) {
+      fprintf (stderr, "%s\n", s);
+    }
+    extern int yylex(void);
+}
+void yyerror (const std::string &s)
+{
+    yyerror(s.c_str());
+}
+%}
+
+%token ID
+%token VAR
+%token NUM 
+%token PRINT 
+%token PRINT_ALL 
+%token ADD 
+%token SUB 
+%token MUL 
+%token LPAREN 
+%token RPAREN 
+%token DERIVE 
+%token EXP 
+%token ASSIGN 
+%token EQUAL
+
+%left ADD SUB
+%left MUL 
+%left DERIVE
+%right NEG
+
+%%
+S   :   E                   {std::cout << OP_ASSIGN     << "ANS"  << " " << $1 << std::endl;}
+    |   ID ASSIGN E         {std::cout << OP_ASSIGN     << $1     << " " << $3 << std::endl;}
+    |   ID EQUAL ID         {std::cout << OP_TEST_EQUAL << $1     << " " << $3 << std::endl;}
+    |   PRINT ID            {std::cout << OP_PRINT      << $1     << " " << std::endl;}
+    |   PRINT_ALL           {std::cout << OP_PRINT      << "ALL"  << std::endl;}
+    ;
+E   :   NUM                 {$$ = $1;}
+    |   ID                  {$$ = $1;}
+    |   VAR                 {$$ = std::string("1") + " " + "0";}
+    |   NUM VAR             {$$ = $1               + " " + "0";}
+    |   NUM VAR EXP NUM     {$$ = $1               + " " + $2;}
+    |   E ADD E             {$$ = std::string("+") + " " + $1 + $2;}
+    |   E SUB E             {$$ = std::string("-") + " " + $1 + $2;}
+    |   E MUL E             {$$ = std::string("*") + " " + $1 + $2;}
+    |   E DERIVE            {$$ = std::string("*") + " " + $1 + $2;}
+    |   SUB E %prec NEG     {$$ = std::string("~") + " " + $2;}
+    |   LPAREN E RPAREN     {$$ = $2;}
+    ;
+%%
+

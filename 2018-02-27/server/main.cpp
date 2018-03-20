@@ -49,12 +49,12 @@ int main()
     MYDEFINE(global, SRadius, r);
     while(true)
     {
-        std::this_thread::sleep_for(std::chrono::seconds(2));
 
+        std::this_thread::sleep_for(std::chrono::seconds(3));
         var = var - 1.5;
         varWatcher.update(var);
         
-        s = s->append("!");
+        //s = s->append("!");
 
         vv.x = vv.x + 1;
         v = vv;

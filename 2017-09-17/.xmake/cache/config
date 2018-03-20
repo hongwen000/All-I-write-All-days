@@ -1,0 +1,19 @@
+
+{
+    ["options_all"] = 
+    {
+        ["cxxflags"] = "-std=c++14"
+    }
+
+,   ["mtimes"] = 
+    {
+        ["xmake.lua"] = 1506244829
+    }
+
+,   ["__version"] = "2.1.6"
+,   ["options_Y"] = 
+    {
+        ["cxxflags"] = "-std=c++14"
+    }
+
+}

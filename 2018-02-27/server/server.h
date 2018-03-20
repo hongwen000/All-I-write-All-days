@@ -3,6 +3,8 @@
 #include <string>
 #include <deque>
 #include <memory>
+#include <set>
+#include <boost/array.hpp>
 #include "chat_message.hpp"
 using boost::asio::ip::tcp;
 class TcpPusher
@@ -16,9 +18,13 @@ public:
         disconnect();
         server_thread_working = false;
         server_thread.join();
+        resend_thread.join();
         //delete p_socket;
         delete p_acceptor;
         delete p_endpoint;
+        for(auto v : metas)
+            for(auto m : v.second)
+                delete m;
     }
 private:
     void server_thread_func();
@@ -34,6 +40,12 @@ private:
     std::deque<chat_message*> msg_que;
     std::mutex mut;
     std::thread server_thread;
+    std::thread resend_thread;
+    std::array<char, chat_message::md5_length> resend_md5;
+    std::map<std::string, std::set<chat_message*>> metas;
+    void handleResend();
+    void handleReceiveMd5();
+
 };
 
 TcpPusher* getTcpServer();
@@ -81,6 +93,14 @@ public:
         update(varValue ? std::string("true") : std::string("false"));
     }
     
+    ~Watcher()
+    {
+        auto p = getTcpServer();
+        if(p)
+        {
+            delete p;
+        }
+    }
 private:
     const std::string className;
     const std::string varType;
@@ -124,6 +144,14 @@ public:
         {
             auto msg = new chat_message(total,  3 * i + 3 + 2, md5, values[i]);
             getTcpServer()->tcp_send(msg);
+        }
+    }
+    ~Watcher()
+    {
+        auto p = getTcpServer();
+        if(p)
+        {
+            delete p;
         }
     }
 private:
@@ -187,6 +215,14 @@ public:
         {
             auto msg = new chat_message(total,  3 * i + 3 + 2, md5, values[i]);
             getTcpServer()->tcp_send(msg);
+        }
+    }
+    ~Watcher()
+    {
+        auto p = getTcpServer();
+        if(p)
+        {
+            delete p;
         }
     }
 private:

@@ -1,0 +1,19 @@
+not-a-term		Skip warning for input/output not being a terminal
+   --ttyfail		Exit if input or output is not a terminal
+   -u <vimrc>		Use <vimrc> instead of any .vimrc
+   --noplugin		Don't load plugin scripts
+   -p[N]		Open N tab pages (default: one for each file)
+   -o[N]		Open N windows (default: one for each file)
+   -O[N]		Like -o but split vertically
+   +			Start at end of file
+   +<lnum>		Start at line <lnum>
+   --cmd <command>	Execute <command> before loading any vimrc file
+   -c <command>		Execute <command> after loading the first file
+   -S <session>		Source file <session> after loading the first file
+   -s <scriptin>	Read Normal mode commands from file <scriptin>
+   -w <scriptout>	Append all typed commands to file <scriptout>
+   -W <scriptout>	Write all typed commands to file <scriptout>
+   -x			Edit encrypted files
+   --startuptime <file>	Write startup timing messages to <file>
+   -i <viminfo>		Use <viminfo> instead of .viminfo
+   --clean		'nocompatible', Vim defaults,;w

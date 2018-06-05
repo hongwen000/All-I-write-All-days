@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/lixinrui/code_snip/2018-02-20/TutorialConfig.h
+
+/Users/lixinrui/code_snip/2018-02-20/tutorial.cpp
+iostream
+-
+cmath
+-
+TutorialConfig.h
+/Users/lixinrui/code_snip/2018-02-20/TutorialConfig.h
+MathFunctions.h
+/Users/lixinrui/code_snip/2018-02-20/MathFunctions.h
+
+MathFunctions/MathFunctions.h
+

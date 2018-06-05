@@ -1,0 +1,10 @@
+graph g {
+    graph[ordering="out"];
+    A--B;
+    A--C;
+    B--D;
+    B--E;
+    C--F;
+    C--NULL[style="invis"];
+    NULL[style="invis"];
+}

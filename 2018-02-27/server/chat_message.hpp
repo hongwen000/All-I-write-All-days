@@ -7,6 +7,9 @@
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
+// Adapted by hongwen000
+// 2018-2
+//
 
 #ifndef CHAT_MESSAGE_HPP
 #define CHAT_MESSAGE_HPP
@@ -17,6 +20,8 @@
 #include <iostream>
 #include <vector>
 #include "md5.h"
+#include "timestamp.h"
+#include "macro.h"
 #ifdef QT_CORE_LIB
 #include <QObject>
 #endif
@@ -42,13 +47,15 @@ public:
   enum { md5_length = MD5_DIGEST_LENGTH + 1};
   enum { max_total_stage = MAX_TOTAL_STAGE };
   enum { max_body_length = 128 };
+  enum { time_stamp_length = 27};
   chat_message(){}
   chat_message(uint8_t new_total, uint8_t new_stage, uint16_t new_body_length)
   {
     setTotal(new_total);
     setStage(new_stage);
     setBody_length(new_body_length);
-    data_ = new char[header_length + md5_length + body_length_];
+    data_ = new char[header_length + md5_length + time_stamp_length + body_length_];
+    setTime_stamp(getTimeStamp());
   }
 
   chat_message(uint8_t new_total, uint8_t new_stage, const std::string& md5, const std::string& s)
@@ -59,10 +66,20 @@ public:
     encode_header();
   }
   
+  chat_message(uint8_t new_total, uint8_t new_stage, const std::string& md5, const std::string& time_stamp,const std::string& s)
+  {
+    setTotal(new_total);
+    setStage(new_stage);
+    setBody_length(s.length() + 1);
+    data_ = new char[header_length + md5_length + time_stamp_length + body_length_];
+    setTime_stamp(time_stamp);
+    setMd5(md5);
+    setBody(s.c_str());
+    encode_header();
+  }
+
   chat_message(const chat_message& rhs)
   {
-    total_ = rhs.total_;
-    stage_ = rhs.stage_;
     data_  = new char[rhs.length()];
     memcpy(data_, rhs.data_, rhs.length());
     decode_header();
@@ -74,19 +91,15 @@ public:
       memcpy(data_, raw_data, len);
       decode_header();
   }
+
   const char* data() const
   {
     return data_;
   }
 
-  void setData(const char* new_data)
-  {
-    memcpy(data_, new_data, header_length + body_length_);
-  }
-
   uint16_t length() const
   {
-    return header_length + md5_length + body_length_;
+    return header_length + md5_length + time_stamp_length + body_length_;
   }
 
   const char* md5() const
@@ -101,15 +114,26 @@ public:
     memcpy(data_ + header_length, new_md5.c_str(), md5_length);
   }
 
+  const char* time_stamp() const
+  {
+      return data_ + header_length + md5_length;
+  }
+
+  void setTime_stamp(const std::string& new_time_stamp)
+  {
+      if(new_time_stamp.length() != time_stamp_length - 1)
+          throw(std::runtime_error("Illegal time stamp"));
+      memcpy(data_ + header_length + md5_length, new_time_stamp.c_str(), time_stamp_length);
+  }
 
   const char* body() const
   {
-    return data_ + header_length + md5_length;
+    return data_ + header_length + md5_length + time_stamp_length;
   }
 
   void setBody(const char* new_body)
   {
-    memcpy(data_ + header_length + md5_length, new_body, body_length_);
+    memcpy(data_ + header_length + md5_length + time_stamp_length, new_body, body_length_);
   }
 
   uint8_t total() const
@@ -148,6 +172,10 @@ public:
       body_length_ = max_body_length;
   }
 
+  ~chat_message()
+  {
+      delete[] data_;
+  }
 private:
   bool decode_header()
   {
@@ -180,76 +208,5 @@ private:
 Q_DECLARE_METATYPE(chat_message)
 #endif
 
-#define MYDEFINE(CLASS,TYPE,NAME)                                 \
-    struct _##CLASS_##TYPE_##NAME {                             \
-        _##CLASS_##TYPE_##NAME() :                              \
-        w(#CLASS, #TYPE, #NAME){}                               \
-        _##CLASS_##TYPE_##NAME& operator=(const TYPE& rhs) {    \
-            m_##NAME = rhs;                                     \
-            w.update(m_##NAME);                                 \
-            return *this;                                       \
-        }                                                       \
-        TYPE& operator*() {                                     \
-            return m_##NAME;                                    \
-        }                                                       \
-        TYPE* operator->() {                                    \
-            return & this->operator*();                         \
-        }                                                       \
-        void update() {                                         \
-            w.update(m_##NAME);                                 \
-        }                                                       \
-        private:                                                \
-            TYPE m_##NAME;                                      \
-            Watcher<TYPE> w;                                    \
-    } NAME;                                                     \
-
-struct is_WatcherObject_tag{};
-
-struct AbstractWatcherObject {
-    using values_type = std::vector<std::string>;
-    virtual values_type watcher_property_value() const = 0;
-    using info_type = std::vector<std::pair<std::string, std::string>> ;
-};
-
-struct WatcherObject {
-    using values_type = std::vector<std::string>;
-    using info_type = std::vector<std::pair<std::string, std::string>> ;
-    using is_WatcherObject = is_WatcherObject_tag;
-};
-
-#define MYDECLARE(CLASS,TYPE,NAME)                                 \
-    struct _##CLASS_##TYPE_##NAME {                             \
-        _##CLASS_##TYPE_##NAME() :                              \
-        w(#CLASS, #TYPE, #NAME){}                               \
-        _##CLASS_##TYPE_##NAME& operator=(const TYPE& rhs) {    \
-            m_##NAME = rhs;                                     \
-            w.update(m_##NAME);                                 \
-            return *this;                                       \
-        }                                                       \
-        const TYPE& operator*() {                               \
-            return m_##NAME;                                    \
-        }                                                       \
-        private:                                                \
-            TYPE m_##NAME;                                      \
-            Watcher<TYPE> w;                                    \
-    };                                                     
-
-template<typename T>
-struct _TYPE_TO_NAME{
-};
-
-
-
-#define MY_REGISTER_WATCHER_TYPE(CLASS)                                 \
-    class CLASS;                                                        \
-    template<>                                                          \
-    struct _TYPE_TO_NAME<CLASS> {                                       \
-        static constexpr const char* name = #CLASS;                     \
-    };                                                                  \
-    class CLASS : public AbstractWatcherObject
-
-#define MY_REGISTER_WATCHER_INFO(CLASS)                                 \
-    auto ref = getRegisteredClassInfo();                                \
-    (*ref)[#CLASS] =
 
 #endif // CHAT_MESSAGE_HPP

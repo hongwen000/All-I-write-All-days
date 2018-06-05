@@ -1,0 +1,16 @@
+
+{
+    ["__version"] = "2.1.6"
+,   ["cmdlines"] = 
+    {
+        "xmake"
+    ,   "xmake r"
+    ,   "xmake f --cxxflags=std=c++14"
+    ,   "xmake f --cxxflags=std=c++14"
+    ,   "xmake"
+    ,   "xmake f --cxxflags=--std=c++14"
+    ,   "xmake"
+    ,   "xmake r"
+    }
+
+}

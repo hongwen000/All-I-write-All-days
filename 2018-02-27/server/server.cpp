@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <ctime>
+#include <boost/bind.hpp>
 #include "server.h"
 
 using boost::asio::ip::tcp;
@@ -24,6 +25,36 @@ std::map<std::string, AbstractWatcherObject::info_type>* getRegisteredClassInfo(
     return registeredClassInfo;
 }
 
+void TcpPusher::handleReceiveMd5()
+{
+    while(true) 
+    {
+        boost::asio::deadline_timer t(io_context, boost::posix_time::milliseconds(10));
+        if(!connected || p_socket.get() == nullptr)
+        {
+            t.wait();
+            continue;
+        }
+        boost::system::error_code error;
+        try{
+            boost::asio::read(*p_socket, boost::asio::buffer(resend_md5));
+        } catch(...){
+            t.wait();
+            continue;
+        }
+        std::lock_guard<std::mutex> lock(mut);
+        auto md5 = std::string(resend_md5.begin(), resend_md5.end() - 1);
+        std::cout << md5.size() << std::endl;
+        for(chat_message* msg : metas[md5])
+        {
+            std::cout << "Resending [" << (unsigned)msg->stage() + 1 << "/" << (unsigned)msg->total() <<
+                    "] " << msg->md5() << ":" << msg->body() << std::endl;
+            msg_que.push_back(new chat_message(*msg));
+            //msg_que.push_back(msg);
+        }
+    }
+}
+
 void TcpPusher::init(int port) {
     try
     {
@@ -32,7 +63,10 @@ void TcpPusher::init(int port) {
         std::cout << "Thread init, waiting for connection at port " << port << std::endl;
         server_thread_working = true;
         server_thread = std::thread{&TcpPusher::server_thread_func, this};
-    } catch (std::exception& e)
+        boost::system::error_code err;
+        resend_thread = std::thread{[this](){handleReceiveMd5();}};
+    }
+        catch (std::exception& e)
     {
         std::cerr << "Error when init tcp pusher: " << e.what() << std::endl;
     }
@@ -40,6 +74,25 @@ void TcpPusher::init(int port) {
 
 void TcpPusher::tcp_send(chat_message* msg)
 {
+    auto md5 = std::string(msg->md5());
+    if(msg->total() == 4 && msg->stage() != 3)
+    {
+        if(!metas[md5].count(msg))
+        {
+            chat_message* copy = new chat_message(*msg);
+            metas[md5].insert(copy);
+            std::cout << "Saved " << md5 << "\t" << metas[md5].size() << std::endl;
+        }
+    }
+    else if(msg->total() > 4 && ((msg->stage() < 5) || ((msg->stage() + 4) % 3 != 0)))
+    {
+        if(!metas[md5].count(msg))
+        {
+            chat_message* copy = new chat_message(*msg);
+            metas[md5].insert(copy);
+            std::cout << "Saved " << md5 << "\t" << metas[md5].size() << std::endl;
+        }
+    }
     std::lock_guard<std::mutex> lock(mut);
     msg_que.push_back(msg);
 }

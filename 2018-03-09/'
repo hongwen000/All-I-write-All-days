@@ -1,0 +1,135 @@
+#include "tcp_client.h"
+Client::Client()
+{
+
+}
+
+bool Client::init(const std::string &hostname, const std::string &port)
+{
+    try {
+        p_resolver =new tcp::resolver(io_context);
+        endpoint = p_resolver->resolve(hostname, port);
+        p_socket = new tcp::socket(io_context);
+        boost::asio::connect(*p_socket, endpoint);
+        working_flag.test_and_set();
+        working_thread = std::thread(&Client::clientThread, this);
+        return true;
+    } catch(...) {
+        throw;
+    }
+}
+
+void Client::clientThread()
+{
+    std::string buf;
+    header_t* header = nullptr;
+    try{
+        while(working_flag.test_and_set())
+        {
+            boost::asio::streambuf b;
+            std::istream is(&b);
+            boost::system::error_code error;
+            boost::asio::streambuf::mutable_buffers_type bufs = b.prepare(512);
+            size_t len = p_socket->read_some(bufs, error);
+            std::cout << "Received " << len << " bytes" << std::endl;
+            b.commit(len);
+            std::cout << "stream has size: " << b.size() << std::endl;
+            while(is >> buf);
+            std::cout << "buf has size: " << buf.size() << std::endl;
+            if(error == boost::asio::error::eof)
+            {
+                boost::asio::deadline_timer t(io_context, boost::posix_time::milliseconds(10));
+                t.wait();
+                boost::asio::connect(*p_socket, endpoint);
+                continue;
+            }
+            else if(error)
+            {
+                throw boost::system::system_error(error);
+            }
+            else{
+                if(true)
+                {
+                    if(header == nullptr) 
+                    {
+                        header = new header_t;
+                        memcpy(header, buf.c_str(), sizeof(header_t));
+                    }
+                    uint16_t body_length = header->body_length;
+                    size_t msg_len_in_buf = chat_message::header_length +
+                                            chat_message::md5_length +
+                                            body_length;
+                    std::cout << "total : " << (unsigned)header->total << std::endl;
+                    std::cout << "stage : " << (unsigned)header->stage << std::endl;
+                    std::cout << "body_len : " << body_length << std::endl;
+                    std::cout << "msg_len_in_buf : " << msg_len_in_buf << std::endl;
+                    if(buf.size() < msg_len_in_buf)
+                    {
+                        std::cout << std::endl;
+                        continue;
+                    }
+                    std::cout << buf.c_str() + chat_message::header_length << std::endl;
+                    std::cout << buf.c_str() + chat_message::header_length + chat_message::md5_length<< std::endl;
+                    chat_message received_message(
+                            header->total, 
+                            header->stage,
+                            buf.c_str() + chat_message::header_length,
+                            buf.c_str() + chat_message::header_length + chat_message::md5_length
+                            );
+                    buf.erase(0, msg_len_in_buf);
+                    std::cout << "Remain: " << buf.size() << std::endl;
+                    std::cout << "Received: [" << (unsigned)received_message.stage() + 1 << "/" << (unsigned)received_message.total() <<
+                                "] " << received_message.md5() << ":" << received_message.body() << std::endl;
+                    delete header;
+                    header = nullptr;
+                    std::cout << std::endl;
+                }
+                else
+                    throw(std::runtime_error("global model interface is not initialized"));
+            }
+        }
+        p_socket->close();
+        delete p_socket;
+        p_socket = nullptr;
+    } catch (std::exception& e) {
+        std::cerr << e.what() << std::endl;
+    }
+}
+
+bool Client::stop()
+{
+    working_flag.clear();
+    working_thread.join();
+    return true;
+}
+
+Client::~Client()
+{
+    if(p_socket && p_socket->is_open())
+        p_socket->close();
+    delete p_resolver;
+    delete p_socket;
+}
+
+std::string ClientInterface::startClient(const std::string &hostname, const std::string &port)
+{
+    try {
+        if(client.init(hostname, port))
+        {
+            setWorking(true);
+        }
+        return "true";
+    } catch(std::exception& e) {
+        return e.what();
+    }
+}
+
+bool ClientInterface::stopClient()
+{
+    if(client.stop())
+    {
+        setWorking(false);
+    }
+    return !working();
+}
+

@@ -1,0 +1,11 @@
+
+{
+    ["__version"] = "2.1.6"
+,   ["cmdlines"] = 
+    {
+        "xmake f --cxx=g++-7 --cxxflags="
+    ,   "xmake f --cxxflags=-std=c++14"
+    ,   "xmake"
+    }
+
+}

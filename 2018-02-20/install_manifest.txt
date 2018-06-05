@@ -1,0 +1,4 @@
+/Users/lixinrui/code_snip/2018-02-20/_CPack_Packages/Darwin/TGZ/Tutorial-1.0.1-Darwin/bin/Tutorial
+/Users/lixinrui/code_snip/2018-02-20/_CPack_Packages/Darwin/TGZ/Tutorial-1.0.1-Darwin/include/TutorialConfig.h
+/Users/lixinrui/code_snip/2018-02-20/_CPack_Packages/Darwin/TGZ/Tutorial-1.0.1-Darwin/bin/libMathFunctions.a
+/Users/lixinrui/code_snip/2018-02-20/_CPack_Packages/Darwin/TGZ/Tutorial-1.0.1-Darwin/include/MathFunctions.h

@@ -3,6 +3,8 @@
 #include <string>
 #include <deque>
 #include <memory>
+#include <thread>
+#include <mutex>
 #include "chat_message.hpp"
 using boost::asio::ip::tcp;
 class TcpPusher

@@ -35,21 +35,12 @@ int main()
         AbstractWatcherObject::info_type{std::make_pair("double", "x"),
                                          std::make_pair("double", "y")}
     };
-    //std::cout << (*ref)["SVector"].size() << std::endl;
-    //std::cout << (*getRegisteredClassInfo())["SVector"].size() << std::endl;
     MYDEFINE(global, SVector, v);
     SVector vv;
-    //while(true)
-    //{
-    //    std::this_thread::sleep_for(std::chrono::seconds(2));
-    //    v->x += 1;
-    //    v->y += 0.5;
-    //    v.update();
-    //}
     MYDEFINE(global, SRadius, r);
     while(true)
     {
-        std::this_thread::sleep_for(std::chrono::seconds(2));
+        std::this_thread::sleep_for(std::chrono::seconds(1));
 
         var = var - 1.5;
         varWatcher.update(var);

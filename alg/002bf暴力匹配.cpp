@@ -57,4 +57,5 @@ int main() {
     String a = "acdbcdefacd";
     String b = "b";
     std::cout << (bf2A(b, a) == (String::size_type) -1) << std::endl;
+    std::cout << bf2A(a,b) << std::endl;
 }

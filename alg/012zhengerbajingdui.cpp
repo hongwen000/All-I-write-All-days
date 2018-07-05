@@ -32,9 +32,9 @@ int main ()
 {
     vector<int> v;
     srand(time(0));
-    int n = 20;
+    int n = 20000;
     for(int i = 0; i < n; ++i) {
-        int r = rand() % 100;
+        int r = rand() % 100000;
         cout << r << ' ';
         insert_heap(v, r);
     }

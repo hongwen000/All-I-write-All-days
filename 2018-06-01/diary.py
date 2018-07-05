@@ -23,4 +23,5 @@ high = lookup.forecast[0].high
 low = lookup.forecast[0].low
 
 print("{}, {}° - {}°".format(condition, low, high), file = f)
+f.close()
 os.system("open -a Typora " + filename)

@@ -69,6 +69,7 @@ int main()
         th.join();
     }
     auto t2 = high_resolution_clock::now();
-    std::cout << "End of run: " << duration_cast<milliseconds>(t2-t1).count() << "us" << std::endl;
+    auto t = duration_cast<microseconds>(t2-t1).count() ;
+    std::cout << "End of run: " << t << "us" << std::endl;
     return 0;
 }

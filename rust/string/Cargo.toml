@@ -1,0 +1,6 @@
+[package]
+name = "string"
+version = "0.1.0"
+authors = ["李新锐 <hongwen000@outlook.com>"]
+
+[dependencies]

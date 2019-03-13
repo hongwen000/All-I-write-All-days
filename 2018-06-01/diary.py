@@ -15,12 +15,12 @@ os.chdir(path)
 os.system("hexo n " + date)
 f = open(filename, 'a')
 
-weather = Weather(unit=Unit.CELSIUS)
-
-lookup = weather.lookup(2161838)
-condition = lookup.condition.text
-high = lookup.forecast[0].high
-low = lookup.forecast[0].low
+# weather = Weather(unit=Unit.CELSIUS)
+# 
+# lookup = weather.lookup(2161838)
+# condition = lookup.condition.text
+# high = lookup.forecast[0].high
+# low = lookup.forecast[0].low
 
 print("{}, {}° - {}°".format(condition, low, high), file = f)
 f.close()
